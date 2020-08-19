@@ -1,0 +1,15 @@
+{
+    "name": "max/php",
+    "description": "slim test",
+    "authors": [
+        {
+            "name": "Max",
+            "email": "Max@max.com"
+        }
+    ],
+    "require": {
+        "slim/slim": "4.0",
+        "slim/psr7": "^1.1",
+        "slim/php-view": "^3.0"
+    }
+}
