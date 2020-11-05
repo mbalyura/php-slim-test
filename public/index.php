@@ -26,6 +26,11 @@ $app->get('/hello/{name}', function (Request $request, Response $response, $args
     return $response;
 });
 
+$app->get('/users/{id}', function ($request, $response, $args) use ($phpView) {
+    $params = ['id' => $args['id'], 'nickname' => 'user-' . $args['id']];
+    return $phpView->render($response, 'show.phtml', $params);
+});
+
 $app->get('/about', function (Request $request, Response $response) use ($phpView) {
     return $phpView->render($response, 'about.phtml');
 });
