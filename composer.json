@@ -1,4 +1,10 @@
 {
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        },
+        "files": []
+    },
     "name": "max/php",
     "description": "slim test",
     "authors": [
@@ -8,8 +14,11 @@
         }
     ],
     "require": {
-        "slim/slim": "4.0",
-        "slim/psr7": "^1.1",
-        "slim/php-view": "^3.0"
+        "slim/slim": "*",
+        "slim/psr7": "*",
+        "slim/http": "*",
+        "slim/php-view": "*",
+        "fzaninotto/faker": "^1.9",
+        "tightenco/collect": "^8.0"
     }
 }

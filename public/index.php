@@ -6,6 +6,11 @@ use Slim\Views\PhpRenderer;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+// Список пользователей
+// Каждый пользователь – ассоциативный массив
+// следующей структуры: id, firstName, lastName, email
+$users = App\Generator::generate(100);
+
 // Instantiate App
 $app = AppFactory::create();
 
@@ -26,9 +31,20 @@ $app->get('/hello/{name}', function (Request $request, Response $response, $args
     return $response;
 });
 
-$app->get('/users/{id}', function ($request, $response, $args) use ($phpView) {
-    $params = ['id' => $args['id'], 'nickname' => 'user-' . $args['id']];
-    return $phpView->render($response, 'show.phtml', $params);
+$app->get('/users', function ($request, $response) use ($users, $phpView) {
+    $term = $request->getQueryParams()['term'];
+    if ($term) {
+        $users = collect($users)->filter(fn($user) => stripos(($user['firstName']), $term) === 0);
+    }
+    $params = ['users' => $users, 'term' => $term];
+    return $phpView->render($response, 'users/index.phtml', $params);
+});
+
+$app->get('/users/{id}', function ($request, $response, $args) use ($users, $phpView) {
+    $id = (int) $args['id'];
+    $user = collect($users)->firstWhere('id', $id);
+    $params = ['user' => $user];
+    return $phpView->render($response, 'users/show.phtml', $params);
 });
 
 $app->get('/about', function (Request $request, Response $response) use ($phpView) {

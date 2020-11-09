@@ -1,0 +1,36 @@
+<style type="text/css">
+  table,
+  tr,
+  td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+  td {
+    width: 100px;
+  }
+
+  tr:nth-child(2n) {
+    background: lightgray;
+  }
+</style>
+<a href="/">Home</a>
+
+
+<form action="/users" method="get">
+    <input type="search" name="term" value="<?= htmlspecialchars($term) ?>" />
+    <input type="submit" value="Search">
+</form>
+
+<table>
+  <?php foreach ($users as $user): ?>
+  <tr>
+    <td>
+      <?= $user['id'] ?>
+    </td>
+    <td>
+      <a href="/users/<?= htmlspecialchars($user['id']) ?>"><?= htmlspecialchars($user['firstName']) ?></a>
+    </td>
+  </tr>
+  <?php endforeach ?>
+</table>
