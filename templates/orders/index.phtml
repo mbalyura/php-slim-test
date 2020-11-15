@@ -1,0 +1,30 @@
+<style type="text/css">
+  table,
+  tr,
+  td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+  td {
+    width: 100px;
+  }
+
+  tr:nth-child(2n) {
+    background: lightgray;
+  }
+</style>
+
+<a href="/orders/new">Add new order</a>
+<table>
+  <?php foreach ($orders as $order): ?>
+    <tr>
+      <td>
+      <?= htmlspecialchars($order['title']) ?>
+      </td>
+      <td>
+      <?= htmlspecialchars($order['paid']) ?>
+      </td>
+    </tr>
+  <?php endforeach ?>
+</table>

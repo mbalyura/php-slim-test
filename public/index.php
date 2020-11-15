@@ -4,8 +4,13 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Views\PhpRenderer;
 
+// валидатор курсов
+use App\OrderValidator;
+
 require __DIR__ . '/../vendor/autoload.php';
 
+// репозиторий для курсов
+$repo = new App\OrderRepository();
 // Список пользователей
 // Каждый пользователь – ассоциативный массив
 // следующей структуры: id, firstName, lastName, email
@@ -45,6 +50,38 @@ $app->get('/users/{id}', function ($request, $response, $args) use ($users, $php
     $user = collect($users)->firstWhere('id', $id);
     $params = ['user' => $user];
     return $phpView->render($response, 'users/show.phtml', $params);
+});
+
+$app->get('/orders', function ($request, $response) use ($repo, $phpView) {
+    $params = [
+        'orders' => $repo->all()
+    ];
+    return $phpView->render($response, 'orders/index.phtml', $params);
+});
+
+$app->get('/orders/new', function ($request, $response) use ($repo, $phpView) {
+    $params = [
+        'order' => ['paid' => null, 'title' => ''],
+        'errors' => []
+    ];
+    return $phpView->render($response, "orders/new.phtml", $params);
+});
+
+$app->post('/orders', function ($request, $response) use ($repo, $phpView) {
+    $validator = new OrderValidator();
+    $order = $request->getParsedBody()['order'];
+    $errors = $validator->validate($order);
+    if (count($errors) === 0) {
+        $repo->save($order);
+        return $response
+            ->withHeader('Location', '/orders')
+            ->withStatus(302);
+    }
+    $params = [
+        'order' => $order,
+        'errors' => $errors
+    ];
+    return $phpView->render($response->withStatus(422), "orders/new.phtml", $params);
 });
 
 $app->get('/about', function (Request $request, Response $response) use ($phpView) {

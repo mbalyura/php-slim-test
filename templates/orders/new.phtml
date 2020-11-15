@@ -1,0 +1,25 @@
+<form action="/orders" method="post">
+  <div>
+    <label>
+        title
+      <input type="text" name="order[title]" value="<?= htmlspecialchars($order['title']) ?>">
+    </label>
+    <?php if (isset($errors['title'])): ?>
+      <div><?= $errors['title'] ?></div>
+    <?php endif ?>
+  </div>
+  <div>
+    <label>
+      paid
+      <select name="order[paid]">
+        <option value="">Select</option>
+        <option <?= $order['paid'] === 'true' ? 'selected' : '' ?> value="true">yes</option>
+        <option <?= $order['paid'] === 'false' ? 'selected' : '' ?> value="false">no</option>
+      </select>
+    </label>
+    <?php if (isset($errors['paid'])): ?>
+      <div><?= $errors['paid'] ?></div>
+    <?php endif ?>
+  </div>
+  <input type="submit" value="add order">
+</form>
